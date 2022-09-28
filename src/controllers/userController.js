@@ -19,7 +19,7 @@ const createUser = async (req, res) => {
             return res.status(400).send({ status: false, msg: "for registration user data is required" })
         }
 
-        if (!isValid(title)) {
+        if (!(title)) {
             return res.status(400).send({ status: false, msg: "title is required for registration" })
         }
        /* if (!(/^w+{3}$/).test(title)) {

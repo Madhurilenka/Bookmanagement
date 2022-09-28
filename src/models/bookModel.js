@@ -2,7 +2,7 @@ const mongoose  = require('mongoose')
 const moment= require("moment")
 
 const BookSchema = new mongoose.Schema({ 
-
+  
     title: {type:String, required:true, unique: true,trim:true},
     excerpt: {type:String, required:true}, 
     userId: {type:mongoose.Schema.Types.ObjectId, required:true, ref:"User",trim:true},

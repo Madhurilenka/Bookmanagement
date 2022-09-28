@@ -5,6 +5,15 @@ const mongoose = require('mongoose')
 
 
 
+let isValid = function (value) {
+    if (typeof value === 'undefined' || value === null) return false
+    if (typeof value === 'string' && value.trim().length === 0&&value === null) return false
+    // if(typeof value ==="number" && value.toString().trim.length===0) return false
+    return true
+}
+
+
+
 //===============================createReview===========================================//
 
 const reviewBoook = async function (req, res) {
@@ -85,7 +94,7 @@ const UpdateReview = async (req, res) => {
         let reviewID = await reviewModel.findById(reviewId)
 
         if (!reviewID) return res.status(404).send({ status: false, msg: "this  reviewId is invalid" })
-        const { review, rating, reviewedBy } = req.body
+            const { review, rating, reviewedBy } = req.body
 
         if(reviewID.bookId.toString() !==bookId){return res.status(404).send({ status: false, msg: "this  reviewId is not matched with bookid" })}
         if (Object.keys(req.body).length == 0)
@@ -96,7 +105,7 @@ const UpdateReview = async (req, res) => {
         }
 
         if ((rating)) {
-            if (!(/^[0-5]$/.test(rating)))
+            if (!(/^[1-5]$/.test(rating)))
                 return res.status(400).send({ status: false, msg: "Plese enter rating from 1 to 5 in integer form only" })
         }
 
@@ -158,7 +167,6 @@ const DeleteReview = async function (req, res) {
         if (!mongoose.Types.ObjectId.isValid(reviewId)) {
             return res.status(400).send({ status: false, msg: `this  reviewId is not a valid Id` })
         }
-
 
         let book = await bookModel.findById(bookId)
         if (!book||book.isDeleted==true) {

@@ -35,9 +35,9 @@ const createBook = async function (req, res) {
         if (!excerpt || typeof excerpt !== "string") {
             return res.status(400).send({ status: false, msg: "Excerpt is mandatory and must be in String" })
         }
-        if (!(/^[a-zA-Z0-9\s]{3,}*$/).test(excerpt)) {
-            return res.status(400).send({ status: false, msg: "Please enter a valid excerpt" })
-        }
+        // if (!(/^[a-zA-Z0-9\s]{3,}*$/).test(excerpt)) {
+            // return res.status(400).send({ status: false, msg: "Please enter a valid excerpt" })
+        // }
 
         if (!userId) {
             return res.status(400).send({ status: false, msg: "UserId is mandatory for registering a book" })
