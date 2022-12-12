@@ -3,12 +3,7 @@ const jwt = require('jsonwebtoken');
 
 
 //==============================createUser=====================================//
-/*let isValid = function (value) {
-    if (typeof value === 'undefined' || value === null) return false
-    if (typeof value === 'string' && value.trim().length === 0&&value === null) return false
-    if(typeof value ==="number" && value.toString().trim.length===0) return false
-    return true
-}*/
+
 
 
 const createUser = async (req, res) => {
@@ -77,7 +72,7 @@ const createUser = async (req, res) => {
 
 
     } catch (err) {
-        res.status(500).send({ status: false, msg: err.message });
+        return res.status(500).send({ status: false, msg: err.message });
     }
 }
 
@@ -85,21 +80,6 @@ const createUser = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-
-        let requestQuery = req.query
-        let requestBody = req.body
-
-        if (Object.keys(requestQuery).length > 0) {
-            res.status(400).send({ status: false, msg: "invalid entry!! No Data required in Query Param" })
-        }
-
-        if (Object.keys(requestBody).length == 0) {
-            res.status(400).send({ status: false, msg: "Please enter Email and Password to login" })
-        }
-
-        if (Object.keys(requestBody).length > 2) {
-            res.status(400).send({ status: false, msg: "invalid request.Only email & password is required for logging In" })
-        }
 
         const { email, password } = req.body
         if (!email) {
@@ -116,8 +96,8 @@ const login = async (req, res) => {
         }
 
         let token = await jwt.sign({ id: data._id.toString() }, "functionupiswaywaycoolproject3group9", { expiresIn: '24hr' })
-        res.header({ "x-api-key": token })
-        res.status(200).send({ status: true, message: "Login Successful", data: token })
+         res.header({ "x-api-key": token })
+       return res.status(200).send({ status: true, message: "Login Successful", data: token })
     }
     catch (err) {
         res.status(500).send({ error: err.message });

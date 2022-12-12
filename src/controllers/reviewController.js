@@ -28,10 +28,9 @@ const reviewBoook = async function (req, res) {
         if (!findBook || findBook.isDeleted == true)
             return res.status(404).send({ status: false, msg: "Book does not exist" })
 
+            let { bookId, reviewedBy, reviewedAt, rating, review, isDeleted } = req.body
         if (Object.keys(req.body).length == 0)
             return res.status(400).send({ status: false, msg: "Please fill Details" })
-
-        let { bookId, reviewedBy, reviewedAt, rating, review, isDeleted } = req.body
 
         if (!bookId)
             return res.status(400).send({ status: false, msg: "Please enter book Id" })
@@ -47,8 +46,8 @@ const reviewBoook = async function (req, res) {
                 return res.status(400).send({ status: false, msg: "Plese enter valid reviewer name" })
             }
         }
-
-        if (typeof review !== "string") return res.status(400).send({ status: false, msg: "Plese enter valid reviewer name" })
+        if (typeof review !== "string") 
+             return res.status(400).send({ status: false, msg: "Plese enter valid reviewer name" })
         
         if (!isValid(rating))
             return res.status(400).send({ status: false, msg: "Plese enter Rating" })
@@ -93,15 +92,18 @@ const UpdateReview = async (req, res) => {
         }
         let reviewID = await reviewModel.findById(reviewId)
 
-        if (!reviewID) return res.status(404).send({ status: false, msg: "this  reviewId is invalid" })
+        if (!reviewID) 
+            return res.status(404).send({ status: false, msg: "this  reviewId is invalid" })
             const { review, rating, reviewedBy } = req.body
 
-        if(reviewID.bookId.toString() !==bookId){return res.status(404).send({ status: false, msg: "this  reviewId is not matched with bookid" })}
+        if(reviewID.bookId.toString() !==bookId){
+                return res.status(404).send({ status: false, msg: "this  reviewId is not matched with bookid" })}
         if (Object.keys(req.body).length == 0)
             return res.status(400).send({ status: false, msg: "Please Enter some data to upadte a review" })
 
         if (review) {
-            if (typeof review !== "string") { return res.status(400).send({ status: false, msg: "you can give only string" }) }
+            if (typeof review !== "string") {
+                 return res.status(400).send({ status: false, msg: "you can give only string" }) }
         }
 
         if ((rating)) {
@@ -174,11 +176,14 @@ const DeleteReview = async function (req, res) {
         }
 
         let review = await reviewModel.findById(reviewId)
-        if(review.bookId.toString() !==bookId){return res.status(404).send({ status: false, msg: "this  reviewId is not matched with bookid" })}
+        if(review.bookId.toString() !==bookId){
+              return res.status(404).send({ status: false, msg: "this  reviewId is not matched with bookid" })}
 
-        if (!review) return res.status(404).send("No review found with this reviewID")
+        if (!review) 
+            return res.status(404).send("No review found with this reviewID")
 
-        if (review.isDeleted == true) return res.status(400).send("This review has already been deleted.")
+        if (review.isDeleted == true) 
+            return res.status(400).send("This review has already been deleted.")
 
         let data = await reviewModel.findByIdAndUpdate({ _id: reviewId }, { $set: { isDeleted: true }})
         book.reviews = book.reviews - 1

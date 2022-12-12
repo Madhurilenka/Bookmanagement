@@ -37,8 +37,7 @@ if(bookId){
   }
 let bookdata = await bookModel.findById(bookId)
 if(!bookdata)return res.status(404).send({status:false,msg:"no book  found"})
-let updateuser = bookdata.userId
-updateuser =updateuser.toString()
+let updateuser = bookdata.userId.toString()
 if(idFromToken !==updateuser){
    return res.status(403).send({ status: false, msg: "Unauthorized Access!!!...you are not authorised" });
         }else{

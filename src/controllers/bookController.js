@@ -1,5 +1,4 @@
 const bookModel = require('../models/bookModel');
-const userModel = require('../models/userModel');
 const mongoose = require('mongoose');
 const reviewmodel = require("../models/reviewModel")
 
@@ -8,16 +7,18 @@ const isvalid = function(value){
     if(typeof value =="string")
 }*/
 //==========================================createBook=========================================//
+
 const createBook = async function (req, res) {
     try {
         const idFromToken =decodedtoken.id
-        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = req.body;
-        if(!userId) return res.status(400).send({ status: false, msg: "give user id" })
-           
-
         if (Object.keys(req.body).length == 0) {
             return res.status(400).send({ status: false, msg: "For registering a book there must be some data" })
         }
+        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = req.body;
+
+        if(!userId) return res.status(400).send({ status: false, msg: "give user id" })
+           
+        
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).send({ status: false, msg: `please enter a valid userID` })
         }
@@ -35,24 +36,14 @@ const createBook = async function (req, res) {
         if (!excerpt || typeof excerpt !== "string") {
             return res.status(400).send({ status: false, msg: "Excerpt is mandatory and must be in String" })
         }
-        // if (!(/^[a-zA-Z0-9\s]{3,}*$/).test(excerpt)) {
-            // return res.status(400).send({ status: false, msg: "Please enter a valid excerpt" })
-        // }
-
-        if (!userId) {
-            return res.status(400).send({ status: false, msg: "UserId is mandatory for registering a book" })
-        }
-
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            return res.status(400).send({ status: false, msg: "Please Enter Valid userId" })
-        }
-
+       
         if (!ISBN) {
             return res.status(400).send({ status: false, msg: "ISBN is mandatory for registering a book" })
         }
 
         if (!(/^[0-9]{3}([\-])[0-9]{10}$/).test(ISBN)) 
             return res.status(400).send("ISBN must be of 13 digits in [123-1234567890] format");
+
         if (!category) {
             return res.status(400).send({ status: false, msg: "Category is mandatory for registering a book" });
         }
@@ -112,17 +103,18 @@ const getBookByquery = async (req, res) => {
                 filter['subcategory'] = subcategory
             }
         }
+        
 
         const books = await bookModel.find(filter).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).collation({ locale: "en" }).sort({ title: 1 })
 
         if (Object.keys(books).length == 0)
-            return res.status(404).send({ status: false, msg: "No Such book found" })
+        return res.status(404).send({ status: false, msg: "No Such book found" })
 
-        res.status(200).send({ status: true, message: 'Books list', data: books })
+       return res.status(200).send({ status: true, message: 'Books list', data: books })
 
     }
     catch (err) {
-        console.log(err.message)
+        // console.log(err.message)
         res.status(500).send({ status: false, Error: err.message })
     }
 }

@@ -4,7 +4,12 @@ const route = require('./routes/route.js');
 const mongoose = require('mongoose');
 const app = express();
 
+const multer= require("multer");
+// const { AppConfig } = require('aws-sdk');
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use( multer().any())
 
 
 mongoose.connect("mongodb+srv://user_1:password45@cluster0.d0linvl.mongodb.net/group-09Database?retryWrites=true&w=majority", {
